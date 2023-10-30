@@ -1,0 +1,135 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #000;
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.add-invest-form {
+    margin-bottom: 20px;
+}
+
+.add-invest-form #add-invest-money {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: none;
+    background-color: #333;
+    color: #fff;
+}
+
+.add-invest-form #add-invest-date {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: none;
+    background-color: #333;
+    color: #fff;
+}
+
+.add-invest-form button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.add-invest-form button:hover {
+    background-color: #45a049;
+}
+
+.data-filter {
+    clear: both;
+    overflow: auto;
+}
+
+.filter-item {
+    margin-right: 15px;
+    float: left;
+}
+
+.filter-item > label {
+    margin-left: 3px;
+}
+
+.data-list {
+    background-color: #333;
+    padding: 0 10px 10px 10px;
+}
+
+.invest-item {
+    clear: both;
+    padding: 5px 0;
+    height: 20px;
+    line-height: 20px;
+}
+
+.invest-item > div {
+    margin-right: 5px;
+    float: left;
+    width: 100px;
+}
+
+.invest-date {
+    font-weight: bold;
+    min-width: 100px;
+}
+
+.invest-money {
+    font-weight: bold;
+}
+
+.invest-close button {
+    padding: 1px;
+    background-color: #AF4C50;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.payment-item {
+    clear: both;
+    padding: 5px 0;
+    height: 20px;
+    line-height: 20px;
+}
+
+.payment-item > div {
+    margin-right: 5px;
+    float: left;
+    width: 100px;
+}
+
+.payment-item.debt > .payment-money {
+    color: red;
+}
+
+.payment-date {
+    font-weight: bold;
+    min-width: 100px;
+}
+
+.payment-close button {
+    padding: 1px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}

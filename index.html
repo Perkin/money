@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Money</title>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="style.css"/>
+	<link rel="icon" href="favicon.ico"/>
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+	<script type="text/javascript" src="db.js"></script>
+	<script type="text/javascript" src="main.js"></script>
+</head>
+<body>
+	<div class="container">
+		<h1>Бабосы</h1>
+
+		<form class="add-invest-form" id="add-invest-form">
+			<input type="text" placeholder="Введите сумму" id="add-invest-money">
+			<input type="date" placeholder="Введите дату" id="add-invest-date">
+			<button type="submit">Добавить</button>
+		</form>
+
+		<div class="data-filter">
+			<div class="filter-item">
+				<input type="checkbox" id="filter-show-all"><label for="filter-show-all">Show closed</label>
+			</div>
+			<div class="filter-item">
+				<input type="checkbox" id="filter-skip-payed" checked><label for="filter-skip-payed">Skip payed</label>
+			</div>
+		</div>
+
+		<div class="data-list">
+			<div>
+				<div class="invest-item">
+					<div class="invest-date">Created</div>
+					<div class="invest-date">Closed</div>
+					<div class="invest-money">Money</div>
+					<div class="invest-close">Close</div>
+				</div>
+			</div>
+			<div id="data-list"></div>
+		</div>
+	</div>
+</body>
+</html>
