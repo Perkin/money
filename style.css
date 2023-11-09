@@ -43,7 +43,7 @@ h1 {
     color: #fff;
 }
 
-.add-invest-form button {
+.add-invest-form #add-invest-submit {
     padding: 10px 20px;
     background-color: #4CAF50;
     color: #fff;
@@ -89,7 +89,7 @@ h1 {
 
 .invest-date {
     font-weight: bold;
-    min-width: 100px;
+    min-width: 110px;
 }
 
 .invest-money {
@@ -123,7 +123,7 @@ h1 {
 
 .payment-date {
     font-weight: bold;
-    min-width: 100px;
+    min-width: 110px;
 }
 
 .payment-close button {

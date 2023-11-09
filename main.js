@@ -17,7 +17,8 @@ openRequest.onupgradeneeded = function(event) {
         case 0:
             const invests = db.createObjectStore('invests', {keyPath: 'id', autoIncrement: true});
             invests.createIndex('isActiveIdx', 'isActive', {unique: false});
-
+            break;
+        case 1:
             const payments = db.createObjectStore('payments', {keyPath: 'id', autoIncrement: true});
             payments.createIndex('investIdIdx', 'investId', {unique: false});
             break;
@@ -140,6 +141,7 @@ function renderPaymentItem(payment, isDebt) {
 
     let dataItemFiller = document.createElement('div');
     dataItemFiller.innerHTML = '&nbsp;'
+    dataItemFiller.className = 'payment-date';
     dataItem.appendChild(dataItemFiller);
 
     let dataItemPaymentDate = document.createElement('div');
@@ -239,15 +241,14 @@ function formatDate(date) {
     }
 
     let year = date.getFullYear();
-    let month = date.getMonth() + 1;
-    if (month < 10) month = '0' + month;
+    let month = date.toLocaleString('default', { month: 'short' }).replace('.', '');
     let day = date.getDate();
     if (day < 10) day = '0' + day;
 
     return `${year}-${month}-${day}`;
 }
 
-let moneyFormatter = new Intl.NumberFormat('ru-RU', {
+let moneyFormatter = new Intl.NumberFormat('default', {
     style: 'currency',
     currency: 'RUB',
     useGrouping: true,
