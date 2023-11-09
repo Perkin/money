@@ -69,7 +69,7 @@ async function updatePayments() {
         let investItem = renderInvestItem(invest);
         dataListElem.appendChild(investItem);
 
-        let payments = await dbGetPayments(invest.id);
+        let payments = await dbGetPayments({id: invest.id});
         for (let payment of payments) {
             let isDebt = false;
             if (filterSkipPayed && payment.isPayed) {
@@ -124,6 +124,8 @@ function renderInvestItem(invest) {
         closeButton.setAttribute('investId', invest.id);
         closeButton.addEventListener('click', closeInvest)
         dataItemClose.appendChild(closeButton);
+    } else if (invest.closedDate) {
+        dataItem.classList.add('closed');
     }
 
     dataItem.appendChild(dataItemClose);
@@ -164,6 +166,8 @@ function renderPaymentItem(payment, isDebt) {
         payedButton.setAttribute('paymentId', payment.id);
         payedButton.addEventListener('click', closePayment)
         dataItemClose.appendChild(payedButton);
+    } else {
+        dataItem.classList.add("payed");
     }
 
     dataItem.appendChild(dataItemClose);
@@ -231,6 +235,34 @@ async function closePayment() {
     await updatePayments();
 }
 
+async function exportData() {
+    let invests = await dbGetInvests();
+    let payments = await dbGetPayments();
+
+    let exportString = JSON.stringify({invests: invests, payments: payments});
+    try {
+        await navigator.clipboard.writeText(exportString);
+        toast('Export data copied to clipboard');
+    } catch (err) {
+        toast('Failed to copy export data to clipboard', true);
+    }
+}
+
+async function importData() {
+    let importJson = prompt('Input JSON to import (IT WILL ERASE ALL CURRENT DATA!!)');
+    if (!importJson) {
+        return;
+    }
+    try {
+        let importData = JSON.parse(importJson);
+        dbImportData(importData);
+        toast('Import success');
+        setTimeout(() => document.location.reload(), 1000);
+    } catch (err) {
+        toast('Failed to parse JSON', true);
+    }
+}
+
 function formatDate(date) {
     if (!date) {
         return '&nbsp;';
@@ -276,4 +308,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('filter-show-all').addEventListener("click", updatePayments);
     document.getElementById('filter-skip-payed').addEventListener("click", updatePayments);
     document.getElementById('add-invest-form').addEventListener('submit', addInvest)
+    document.getElementById('invest-export').addEventListener('click', exportData)
+    document.getElementById('invest-import').addEventListener('click', importData)
 });

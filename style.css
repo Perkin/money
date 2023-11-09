@@ -43,7 +43,7 @@ h1 {
     color: #fff;
 }
 
-.add-invest-form #add-invest-submit {
+.add-invest-form button {
     padding: 10px 20px;
     background-color: #4CAF50;
     color: #fff;
@@ -53,6 +53,12 @@ h1 {
 
 .add-invest-form button:hover {
     background-color: #45a049;
+}
+
+#invest-export, #invest-import {
+    background-color: #AF4C50;
+    float: right;
+    margin-left: 5px;
 }
 
 .data-filter {
@@ -79,6 +85,10 @@ h1 {
     padding: 5px 0;
     height: 20px;
     line-height: 20px;
+}
+
+.invest-item.closed {
+    color: #AF4C50;
 }
 
 .invest-item > div {
@@ -109,6 +119,10 @@ h1 {
     padding: 5px 0;
     height: 20px;
     line-height: 20px;
+}
+
+.payment-item.payed {
+    color: #AF4C50;
 }
 
 .payment-item > div {

@@ -7,7 +7,7 @@ async function dbGetInvestById(investId) {
     return dbDoAsync (() => invests.get(investId));
 }
 
-async function dbGetInvests(filters) {
+async function dbGetInvests(filters = {}) {
     let filterOnlyActive = filters.filterOnlyActive;
 
     let transaction = db.transaction("invests");
@@ -55,7 +55,7 @@ async function dbCalculatePayments() {
     for(const invest of invests) {
         let lastPaymentDate = invest.createdDate;
 
-        let payments = await dbGetPayments(invest.id);
+        let payments = await dbGetPayments({id: invest.id});
         let lastPayment = payments.pop();
 
         // Keep the last unpayed row active
@@ -73,12 +73,17 @@ async function dbCalculatePayments() {
     }
 }
 
-async function dbGetPayments(investId) {
+async function dbGetPayments(filters = {}) {
     let transaction = db.transaction("payments");
     let payments = transaction.objectStore("payments");
 
-    let investIndex = payments.index('investIdIdx');
-    return dbDoAsync(() => investIndex.getAll(investId));
+    let investId = filters.id;
+    if (investId) {
+        let investIndex = payments.index('investIdIdx');
+        return dbDoAsync(() => investIndex.getAll(investId));
+    } else {
+        return dbDoAsync (() => payments.getAll());
+    }
 }
 
 async function dbAddPayment(investId, investMoney, paymentDate) {
@@ -110,6 +115,29 @@ async function dbGetPaymentById(paymentId) {
     let payments = transaction.objectStore("payments");
 
     return dbDoAsync (() => payments.get(paymentId));
+}
+
+async function dbImportData(importData) {
+    let transaction = db.transaction(["payments", "invests"], "readwrite");
+
+    let invests = transaction.objectStore("invests");
+    await dbDoAsync (() => invests.clear());
+
+    for (const invest of importData.invests) {
+        invest.createdDate = new Date(Date.parse(invest.createdDate));
+        if (!invest.isActive && invest.closedDate) {
+            invest.closedDate = new Date(Date.parse(invest.closedDate));
+        }
+        await dbDoAsync(() => invests.put(invest));
+    }
+
+    let payments = transaction.objectStore("payments");
+    await dbDoAsync (() => payments.clear());
+
+    for (const payment of importData.payments) {
+        payment.paymentDate = new Date(Date.parse(payment.paymentDate));
+        await dbDoAsync(() => payments.put(payment));
+    }
 }
 
 async function dbDoAsync(callback) {
