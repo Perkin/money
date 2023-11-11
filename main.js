@@ -13,14 +13,17 @@ let openRequest = indexedDB.open('money', dbVersion);
 
 openRequest.onupgradeneeded = function(event) {
     db = openRequest.result;
-    switch (event.oldVersion) {
-        case 0:
-            const invests = db.createObjectStore('invests', {keyPath: 'id', autoIncrement: true});
-            invests.createIndex('isActiveIdx', 'isActive', {unique: false});
-            break;
-        case 1:
-            const payments = db.createObjectStore('payments', {keyPath: 'id', autoIncrement: true});
-            payments.createIndex('investIdIdx', 'investId', {unique: false});
+    switch (event.newVersion) {
+        case 2:
+            if (!db.objectStoreNames.contains('invests')) {
+                const invests = db.createObjectStore('invests', {keyPath: 'id', autoIncrement: true});
+                invests.createIndex('isActiveIdx', 'isActive', {unique: false});
+            }
+
+            if (!db.objectStoreNames.contains('payments')) {
+                const payments = db.createObjectStore('payments', {keyPath: 'id', autoIncrement: true});
+                payments.createIndex('investIdIdx', 'investId', {unique: false});
+            }
             break;
     }
 };
