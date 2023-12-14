@@ -118,20 +118,20 @@ h1 {
     border-top: 1px solid black;
 }
 
+.data-item.payment-item.payed {
+    color: #AF4C50;
+}
+
+.data-item.payment-item.debt > .item-money {
+    color: red;
+}
+
 .invest-close-button {
     padding: 1px;
     background-color: #AF4C50;
     color: #fff;
     border: none;
     cursor: pointer;
-}
-
-.payment-item.payed {
-    color: #AF4C50;
-}
-
-.payment-item.debt > .payment-money {
-    color: red;
 }
 
 .payment-close-button {
