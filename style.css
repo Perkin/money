@@ -11,9 +11,8 @@ body {
 }
 
 .container {
-    max-width: 500px;
+    width: 420px;
     margin: 0 auto;
-    padding: 20px;
 }
 
 h1 {
@@ -76,37 +75,50 @@ h1 {
 }
 
 .data-list {
+    display: table;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.cur-date-item {
+    height: 1px;
+    background-color: #AF4C50;
+}
+
+.data-item {
+    display: table-row;
+    width: 100%;
     background-color: #333;
-    padding: 0 10px 10px 10px;
 }
 
-.invest-item {
-    clear: both;
-    padding: 5px 0;
-    height: 20px;
-    line-height: 20px;
+.data-item.odd {
+    background-color: #444;
 }
 
-.invest-item.closed {
+.data-item.closed {
     color: #AF4C50;
 }
 
-.invest-item > div {
-    margin-right: 5px;
-    float: left;
-    width: 100px;
+.data-item > div {
+    display: table-cell;
+    padding: 5px;
+    width: 120px;
 }
 
-.invest-date {
-    font-weight: bold;
-    min-width: 110px;
-}
-
-.invest-money {
+.data-item.invest-item {
     font-weight: bold;
 }
 
-.invest-close button {
+.data-item .item-actions {
+    width: 60px;
+    text-align: center;
+}
+
+.data-item.invest-item {
+    border-top: 1px solid black;
+}
+
+.invest-close-button {
     padding: 1px;
     background-color: #AF4C50;
     color: #fff;
@@ -114,33 +126,15 @@ h1 {
     cursor: pointer;
 }
 
-.payment-item {
-    clear: both;
-    padding: 5px 0;
-    height: 20px;
-    line-height: 20px;
-}
-
 .payment-item.payed {
     color: #AF4C50;
-}
-
-.payment-item > div {
-    margin-right: 5px;
-    float: left;
-    width: 100px;
 }
 
 .payment-item.debt > .payment-money {
     color: red;
 }
 
-.payment-date {
-    font-weight: bold;
-    min-width: 110px;
-}
-
-.payment-close button {
+.payment-close-button {
     padding: 1px;
     background-color: #4CAF50;
     color: #fff;

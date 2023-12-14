@@ -53,6 +53,13 @@ async function updatePayments() {
     let filterSkipPayed = document.getElementById('filter-skip-payed').checked;
     let invests = await dbGetInvests({filterOnlyActive: filterOnlyActive});
 
+    invests.sort((a, b) => {
+        let dayA = a.createdDate.getDate();
+        let dayB = b.createdDate.getDate();
+
+        return dayA - dayB;
+    });
+
     let dataListElem= document.getElementById('data-list');
     dataListElem.innerHTML = '';
 
@@ -63,13 +70,22 @@ async function updatePayments() {
     const today = new Date();
     let totalInvestedMoney = 0;
     let totalDebtMoney = 0;
+    let i = 0;
+    let curDateLineDrawn = false;
 
     for (const invest of invests) {
+        i++;
+
         if (invest.isActive) {
             totalInvestedMoney += invest.money;
         }
 
-        let investItem = renderInvestItem(invest);
+        if (!curDateLineDrawn && today.getDate() <= invest.createdDate.getDate()) {
+            curDateLineDrawn = true;
+            dataListElem.appendChild(renderCurDateLine());
+        }
+
+        let investItem = renderInvestItem(invest, i);
         dataListElem.appendChild(investItem);
 
         let payments = await dbGetPayments({id: invest.id});
@@ -82,7 +98,7 @@ async function updatePayments() {
                 isDebt = true;
                 totalDebtMoney += payment.money;
             }
-            let paymentItem = renderPaymentItem(payment, isDebt);
+            let paymentItem = renderPaymentItem(payment, isDebt, i);
             dataListElem.appendChild(paymentItem);
         }
     }
@@ -98,32 +114,43 @@ async function updatePayments() {
     }
 }
 
-function renderInvestItem(invest) {
+function renderCurDateLine() {
     let dataItem =  document.createElement('div');
-    dataItem.className = 'invest-item';
+    dataItem.className = 'cur-date-item';
+
+    return dataItem;
+}
+
+function renderInvestItem(invest, index) {
+    let dataItem =  document.createElement('div');
+    dataItem.className = 'data-item invest-item';
+    if (index != undefined && (index % 2)) {
+        dataItem.classList.add('odd')
+    }
 
     let dataItemCreatedDate = document.createElement('div');
-    dataItemCreatedDate.className = 'invest-date';
+    dataItemCreatedDate.className = 'item-date';
     dataItemCreatedDate.innerHTML = formatDate(invest.createdDate);
     dataItem.appendChild(dataItemCreatedDate);
 
     let dataItemClosedDate = document.createElement('div');
-    dataItemClosedDate.className = 'invest-date';
+    dataItemClosedDate.className = 'item-date';
     dataItemClosedDate.innerHTML = formatDate(invest.closedDate);
     dataItem.appendChild(dataItemClosedDate);
 
     let dataItemMoney = document.createElement('div');
-    dataItemMoney.className = 'invest-money';
+    dataItemMoney.className = 'item-money';
     dataItemMoney.innerHTML = formatMoney(invest.money);
     dataItem.appendChild(dataItemMoney);
 
     let dataItemClose = document.createElement('div');
-    dataItemClose.className = 'invest-close';
+    dataItemClose.className = 'item-actions';
 
     if (invest.isActive == 1) {
         let closeButton = document.createElement('button');
         closeButton.className = 'invest-close-button';
         closeButton.innerHTML = 'X';
+        closeButton.title = 'Close investment';
         closeButton.setAttribute('investId', invest.id);
         closeButton.addEventListener('click', closeInvest)
         dataItemClose.appendChild(closeButton);
@@ -136,36 +163,40 @@ function renderInvestItem(invest) {
     return dataItem;
 }
 
-function renderPaymentItem(payment, isDebt) {
+function renderPaymentItem(payment, isDebt, index) {
     let dataItem =  document.createElement('div');
-    dataItem.className = 'payment-item';
+    dataItem.className = 'data-item payment-item';
 
     if (isDebt) {
         dataItem.classList.add('debt');
     }
 
+    if (index != undefined && (index % 2)) {
+        dataItem.classList.add('odd')
+    }
+
     let dataItemFiller = document.createElement('div');
     dataItemFiller.innerHTML = '&nbsp;'
-    dataItemFiller.className = 'payment-date';
     dataItem.appendChild(dataItemFiller);
 
     let dataItemPaymentDate = document.createElement('div');
-    dataItemPaymentDate.className = 'payment-date';
+    dataItemPaymentDate.className = 'item-date';
     dataItemPaymentDate.innerHTML = formatDate(payment.paymentDate);
     dataItem.appendChild(dataItemPaymentDate);
 
     let dataItemMoney = document.createElement('div');
-    dataItemMoney.className = 'payment-money';
+    dataItemMoney.className = 'item-money';
     dataItemMoney.innerHTML = formatMoney(payment.money);
     dataItem.appendChild(dataItemMoney);
 
     let dataItemClose = document.createElement('div');
-    dataItemClose.className = 'payment-close';
+    dataItemClose.className = 'item-actions';
 
     if (payment.isPayed == 0) {
         let payedButton = document.createElement('button');
         payedButton.className = 'payment-close-button';
         payedButton.innerHTML = '✓';
+        payedButton.title = 'Approve payment';
         payedButton.setAttribute('paymentId', payment.id);
         payedButton.addEventListener('click', closePayment)
         dataItemClose.appendChild(payedButton);
