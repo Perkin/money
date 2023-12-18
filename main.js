@@ -80,7 +80,7 @@ async function updatePayments() {
             totalInvestedMoney += invest.money;
         }
 
-        if (!curDateLineDrawn && today.getDate() <= invest.createdDate.getDate()) {
+        if (!curDateLineDrawn && today.getDate() < invest.createdDate.getDate()) {
             curDateLineDrawn = true;
             dataListElem.appendChild(renderCurDateLine());
         }
