@@ -241,6 +241,18 @@ async function closeInvest() {
         return;
     }
 
+    let payments = await dbGetPayments({id: investId});
+    for (let payment of payments) {
+        if (!payment.isPayed) {
+            let res = await dbClosePayment(payment.id);
+            if (res !== undefined) {
+                toast('Unpdayed payment closed');
+            } else {
+                toast(res, true);
+            }
+        }
+    }
+
     let res = await dbCloseInvest(investId);
     if (res !== undefined) {
         toast('Invest closed');
