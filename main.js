@@ -103,6 +103,10 @@ async function updatePayments() {
         }
     }
 
+    if (!curDateLineDrawn) {
+        dataListElem.appendChild(renderCurDateLine());
+    }
+
     let total = {createdDate: 'Total invest', closedDate: null, money: totalInvestedMoney, isActive: 0};
     let totalItem = renderInvestItem(total);
     dataListElem.appendChild(totalItem);
@@ -140,7 +144,7 @@ function renderInvestItem(invest, index) {
 
     let dataItemMoney = document.createElement('div');
     dataItemMoney.className = 'item-money';
-    dataItemMoney.innerHTML = formatMoney(invest.money);
+    dataItemMoney.innerHTML = formatMoney(invest.money) + ' (' + (100 * (invest.incomeRatio || defaultIncomeRatio)) + '%)';
     dataItem.appendChild(dataItemMoney);
 
     let dataItemClose = document.createElement('div');
@@ -213,16 +217,18 @@ async function addInvest(e) {
     if (e.preventDefault) e.preventDefault();
 
     let money = document.getElementById('add-invest-money').value;
+    let incomeRatio = document.getElementById('add-invest-income-ratio').value;
     let createdDate = document.getElementById('add-invest-date').value;
 
-    if (!money || !createdDate) {
+    if (!money || !incomeRatio || !createdDate) {
         return;
     }
 
     money = parseFloat(money);
+    incomeRatio = parseFloat(incomeRatio);
     createdDate = new Date(Date.parse(createdDate));
 
-    let res = await dbAddInvest(money, createdDate);
+    let res = await dbAddInvest(money, incomeRatio, createdDate);
     if (res !== undefined) {
         document.getElementById('add-invest-form').reset();
         toast('Invest added');

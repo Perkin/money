@@ -15,11 +15,18 @@
 		<h1>Money</h1>
 
 		<form class="add-invest-form" id="add-invest-form">
-			<input type="text" placeholder="Enter the money to invest" id="add-invest-money">
-			<input type="date" placeholder="Investment date" id="add-invest-date">
-			<button type="submit" id="add-invest-submit">Add</button>
-			<button type="button" id="invest-export">Export</button>
-			<button type="button" id="invest-import">Import</button>
+			<div class="money-row">
+				<input type="text" placeholder="Enter the money to invest" id="add-invest-money">
+				<input type="text" placeholder="Invest ratio" id="add-invest-income-ratio" value="0.05">
+			</div>
+			<div class="date-row">
+				<input type="date" placeholder="Investment date" id="add-invest-date">
+			</div>
+			<div class="button-row">
+				<button type="submit" id="add-invest-submit">Add</button>
+				<button type="button" id="invest-export">Export</button>
+				<button type="button" id="invest-import">Import</button>
+			</div>
 		</form>
 
 		<div class="data-filter">
@@ -32,11 +39,11 @@
 		</div>
 
 		<div class="data-list">
-			<div>
+			<div class="data-list-header">
 				<div class="data-item">
-					<div>Created</div>
-					<div>Closed</div>
-					<div>Money</div>
+					<div class="item-date">Created</div>
+					<div class="item-date">Closed/Paydate</div>
+					<div class="item-money">Money</div>
 					<div class="item-actions">Actions</div>
 				</div>
 			</div>

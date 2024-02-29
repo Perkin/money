@@ -1,3 +1,8 @@
+:root {
+    --container-width: 480px;
+    --item-width: calc(var(--container-width) / 4 + 10px);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -11,7 +16,7 @@ body {
 }
 
 .container {
-    width: 420px;
+    width: var(--container-width);
     margin: 0 auto;
 }
 
@@ -24,7 +29,28 @@ h1 {
     margin-bottom: 20px;
 }
 
-.add-invest-form #add-invest-money {
+.add-invest-form .money-row {
+    display: flex;
+}
+
+.add-invest-form .money-row input {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: none;
+    background-color: #333;
+    color: #fff;
+}
+
+.add-invest-form .money-row #add-invest-money {
+    width: 70%;
+}
+
+.add-invest-form .money-row #add-invest-income-ratio {
+    width: calc(30% - 5px);
+    margin-left: 5px;
+}
+
+.add-invest-form .date-row #add-invest-date {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
@@ -33,16 +59,7 @@ h1 {
     color: #fff;
 }
 
-.add-invest-form #add-invest-date {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: none;
-    background-color: #333;
-    color: #fff;
-}
-
-.add-invest-form button {
+.add-invest-form .button-row button {
     padding: 10px 20px;
     background-color: #4CAF50;
     color: #fff;
@@ -50,11 +67,12 @@ h1 {
     cursor: pointer;
 }
 
-.add-invest-form button:hover {
+.add-invest-form .button-row button:hover {
     background-color: #45a049;
 }
 
-#invest-export, #invest-import {
+.add-invest-form .button-row #invest-export,
+.add-invest-form .button-row #invest-import {
     background-color: #AF4C50;
     float: right;
     margin-left: 5px;
@@ -65,12 +83,12 @@ h1 {
     overflow: auto;
 }
 
-.filter-item {
+.data-filter .filter-item {
     margin-right: 15px;
     float: left;
 }
 
-.filter-item > label {
+.data-filter .filter-item > label {
     margin-left: 3px;
 }
 
@@ -80,53 +98,57 @@ h1 {
     width: 100%;
 }
 
-.cur-date-item {
+.data-list .cur-date-item {
     height: 1px;
     background-color: #AF4C50;
 }
 
-.data-item {
+.data-list .data-item {
     display: table-row;
     width: 100%;
     background-color: #333;
 }
 
-.data-item.odd {
+.data-list .data-item.odd {
     background-color: #444;
 }
 
-.data-item.closed {
+.data-list .data-item.closed {
     color: #AF4C50;
 }
 
-.data-item > div {
+.data-list .data-item > div {
     display: table-cell;
     padding: 5px;
-    width: 120px;
+    width: var(--item-width);
 }
 
-.data-item.invest-item {
+.data-list .data-item.invest-item {
     font-weight: bold;
 }
 
-.data-item .item-actions {
-    width: 60px;
+.data-list .data-item .item-money {
+    width: calc(var(--item-width) + 50px);
+}
+
+.data-list .data-item .item-actions {
+    width: calc(var(--item-width) - 50px);
     text-align: center;
 }
 
-.data-item.invest-item {
+.data-list .data-item.invest-item {
     border-top: 1px solid black;
 }
 
-.data-item.payment-item.payed {
+.data-list .data-item.payment-item.payed {
     color: #AF4C50;
 }
 
-.data-item.payment-item.debt > .item-money {
+.data-list .data-item.payment-item.debt > .item-money {
     color: red;
 }
 
-.invest-close-button {
+.data-list .invest-close-button {
     padding: 1px;
     background-color: #AF4C50;
     color: #fff;
@@ -134,7 +156,7 @@ h1 {
     cursor: pointer;
 }
 
-.payment-close-button {
+.data-list .payment-close-button {
     padding: 1px;
     background-color: #4CAF50;
     color: #fff;

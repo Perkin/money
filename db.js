@@ -1,4 +1,4 @@
-let incomePart = 0.05;
+const defaultIncomeRatio = 0.05;
 
 async function dbGetInvestById(investId) {
     let transaction = db.transaction("invests");
@@ -21,12 +21,13 @@ async function dbGetInvests(filters = {}) {
     }
 }
 
-async function dbAddInvest(money, createdDate) {
+async function dbAddInvest(money, incomeRatio, createdDate) {
     let transaction = db.transaction("invests", "readwrite");
 
     let invests = transaction.objectStore("invests");
     let invest = {
         money: money,
+        incomeRatio: incomeRatio,
         createdDate: createdDate,
         closedDate: null,
         isActive: 1,
@@ -69,7 +70,7 @@ async function dbCalculatePayments() {
 
         lastPaymentDate.setMonth(lastPaymentDate.getMonth() + 1);
 
-        await dbAddPayment(invest.id, invest.money, lastPaymentDate);
+        await dbAddPayment(invest.id, invest.money, invest.incomeRatio || defaultIncomeRatio, lastPaymentDate);
     }
 }
 
@@ -86,13 +87,13 @@ async function dbGetPayments(filters = {}) {
     }
 }
 
-async function dbAddPayment(investId, investMoney, paymentDate) {
+async function dbAddPayment(investId, investMoney, incomeRatio, paymentDate) {
     let transaction = db.transaction("payments", "readwrite");
     let payments = transaction.objectStore("payments");
 
     let payment = {
         investId: investId,
-        money: Math.round(investMoney * incomePart),
+        money: Math.round(investMoney * incomeRatio),
         paymentDate: paymentDate,
         isPayed: 0,
     }
