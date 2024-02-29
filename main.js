@@ -144,7 +144,10 @@ function renderInvestItem(invest, index) {
 
     let dataItemMoney = document.createElement('div');
     dataItemMoney.className = 'item-money';
-    dataItemMoney.innerHTML = formatMoney(invest.money) + ' (' + (100 * (invest.incomeRatio || defaultIncomeRatio)) + '%)';
+    dataItemMoney.innerHTML = formatMoney(invest.money);
+    if (index != undefined) {
+        dataItemMoney.innerHTML += ' (' + (100 * (invest.incomeRatio || defaultIncomeRatio)) + '%)';
+    }
     dataItem.appendChild(dataItemMoney);
 
     let dataItemClose = document.createElement('div');
