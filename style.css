@@ -163,3 +163,22 @@ h1 {
     border: none;
     cursor: pointer;
 }
+
+#chart-container {
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    width: 90%;
+    height: 90%;
+    border: 1px solid white;
+    background-color: #000;
+    display: none;
+}
+
+#close-chart {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 5px;
+    cursor: pointer;
+}

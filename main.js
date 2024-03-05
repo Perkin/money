@@ -48,6 +48,111 @@ async function main() {
     await updatePayments();
 }
 
+async function showChart() {
+    let ctx = document.getElementById('chart-ctx');
+    if (!ctx) {
+        ctx = document.createElement('canvas');
+        ctx.id = 'chart-ctx';
+
+        document.getElementById('chart-container').appendChild(ctx);
+
+        Chart.defaults.color = '#fff';
+        new Chart(ctx, await getChartData());
+    }
+    document.getElementById('chart-container').style.display = 'block';
+}
+
+async function closeChart() {
+    document.getElementById('chart-container').style.display = 'none';
+}
+
+async function getChartData() {
+    let invests = await dbGetInvests();
+    let investData = [];
+    for (const invest of invests) {
+        investData.push({date: invest.createdDate, money: invest.money});
+        if (invest.isActive == 0) {
+            investData.push({date: invest.closedDate, money: -invest.money});
+        }
+    }
+
+    investData.sort((a, b) => {
+        return a.date.getTime() - b.date.getTime();
+    });
+
+    let total = 0.00;
+    let labels = [];
+    let data1 = [];
+
+    for (const invest of investData) {
+        total += invest.money;
+
+        labels.push(invest.date);
+        data1.push(total);
+    }
+
+    let data = {
+        "labels": labels,
+        "datasets": [
+            {
+                label: "Investments",
+                data: data1,
+                backgroundColor: "rgba(76, 175, 80, 0.2)",
+                borderColor: "rgba(76, 175, 80)",
+                fill: true,
+                pointRadius: 5,
+                pointHoverRadius: 7,
+                hitRadius: 5,
+            }
+        ]
+    };
+
+    return {
+        type: "line",
+        data: data,
+        options: {
+            responsive: true,
+            layout: {
+                padding: 10
+            },
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        unit: 'month',
+                        tooltipFormat: 'yyyy-MM-dd HH:mm'
+                    },
+                    grid: {
+                        color: "rgba(76, 175, 80, 0.2)"
+                    }
+                },
+                y: {
+                    grid: {
+                        color: "rgba(76, 175, 80, 0.2)"
+                    }
+                }
+            },
+            plugins: {
+                zoom: {
+                    zoom: {
+                        mode: 'x',
+                        wheel: {
+                            enabled: true
+                        },
+                        pinch: {
+                            enabled: true
+                        }
+                    },
+                    pan: {
+                        enabled: true,
+                        mode: 'x'
+                    }
+                }
+            }
+        }
+    };
+}
+
 async function updatePayments() {
     let filterOnlyActive = document.getElementById('filter-show-all').checked ? 0 : 1;
     let filterSkipPayed = document.getElementById('filter-skip-payed').checked;
@@ -363,6 +468,8 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('filter-show-all').addEventListener("click", updatePayments);
     document.getElementById('filter-skip-payed').addEventListener("click", updatePayments);
     document.getElementById('add-invest-form').addEventListener('submit', addInvest)
+    document.getElementById('show-chart').addEventListener("click", showChart);
+    document.getElementById('close-chart').addEventListener("click", closeChart);
     document.getElementById('invest-export').addEventListener('click', exportData)
     document.getElementById('invest-import').addEventListener('click', importData)
 });

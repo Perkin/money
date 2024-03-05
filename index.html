@@ -7,11 +7,18 @@
 	<link rel="icon" href="favicon.ico"/>
 	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/hammerjs"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
 	<script type="text/javascript" src="db.js?v=1.2"></script>
-	<script type="text/javascript" src="main.js?v=1.2"></script>
+	<script defer type="text/javascript" src="main.js?v=1.2"></script>
 </head>
 <body>
-	<div class="container">
+	<div id="chart-container">
+		<button id="close-chart">X</button>
+	</div>
+	<div class="container" id="container">
 		<h1>Money</h1>
 
 		<form class="add-invest-form" id="add-invest-form">
@@ -24,6 +31,7 @@
 			</div>
 			<div class="button-row">
 				<button type="submit" id="add-invest-submit">Add</button>
+				<button type="button" id="show-chart">Chart</button>
 				<button type="button" id="invest-export">Export</button>
 				<button type="button" id="invest-import">Import</button>
 			</div>
