@@ -336,6 +336,9 @@ async function addInvest(e) {
     incomeRatio = parseFloat(incomeRatio);
     createdDate = new Date(Date.parse(createdDate));
 
+    now = new Date();
+    createdDate.setHours(now.getHours(), now.getMinutes(), now.getSeconds());
+
     let res = await dbAddInvest(money, incomeRatio, createdDate);
     if (res !== undefined) {
         document.getElementById('add-invest-form').reset();
