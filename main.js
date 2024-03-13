@@ -155,7 +155,7 @@ async function getChartData() {
 
 async function updatePayments() {
     let filterOnlyActive = document.getElementById('filter-show-all').checked ? 0 : 1;
-    let filterSkipPayed = document.getElementById('filter-skip-payed').checked;
+    let filterShowPayed = document.getElementById('filter-show-payed').checked;
     let invests = await dbGetInvests({filterOnlyActive: filterOnlyActive});
 
     invests.sort((a, b) => {
@@ -175,6 +175,7 @@ async function updatePayments() {
     const today = new Date();
     let totalInvestedMoney = 0;
     let totalDebtMoney = 0;
+    let totalIncomeMoney = 0;
     let i = 0;
     let curDateLineDrawn = false;
 
@@ -195,8 +196,10 @@ async function updatePayments() {
 
         let payments = await dbGetPayments({id: invest.id});
         for (let payment of payments) {
+            totalIncomeMoney += payment.money;
+
             let isDebt = false;
-            if (filterSkipPayed && payment.isPayed) {
+            if (!filterShowPayed && payment.isPayed) {
                 continue;
             }
             if (!payment.isPayed && payment.paymentDate < today) {
@@ -212,12 +215,16 @@ async function updatePayments() {
         dataListElem.appendChild(renderCurDateLine());
     }
 
-    let total = {createdDate: 'Total invest', closedDate: null, money: totalInvestedMoney, isActive: 0};
+    let total = {createdDate: 'Current invest', closedDate: null, money: totalInvestedMoney, isActive: 0};
     let totalItem = renderInvestItem(total);
     dataListElem.appendChild(totalItem);
 
+    let totalIncome = {createdDate: 'Income', closedDate: null, money: totalIncomeMoney, isActive: 0};
+    let totalIncomeItem = renderInvestItem(totalIncome);
+    dataListElem.appendChild(totalIncomeItem);
+
     if (totalDebtMoney > 0) {
-        let totalDebt = {paymentDate: 'Total debt', closedDate: null, money: totalDebtMoney, isPayed: 1};
+        let totalDebt = {paymentDate: 'Current debt', closedDate: null, money: totalDebtMoney, isPayed: 1};
         let totalDebtItem = renderPaymentItem(totalDebt, true);
         dataListElem.appendChild(totalDebtItem);
     }
@@ -469,7 +476,7 @@ function toast(text, isError) {
 
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('filter-show-all').addEventListener("click", updatePayments);
-    document.getElementById('filter-skip-payed').addEventListener("click", updatePayments);
+    document.getElementById('filter-show-payed').addEventListener("click", updatePayments);
     document.getElementById('add-invest-form').addEventListener('submit', addInvest)
     document.getElementById('show-chart').addEventListener("click", showChart);
     document.getElementById('close-chart').addEventListener("click", closeChart);
